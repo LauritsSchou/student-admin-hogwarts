@@ -1,4 +1,4 @@
-package edu.hogwarts.student.model;
+package edu.hogwarts.teacher.model;
 
 import edu.hogwarts.house.model.House;
 import jakarta.persistence.Entity;
@@ -7,9 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.time.LocalDate;
+
 @Entity
-public class Student {
-    @Id
+public class Teacher {
+@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String firstName;
@@ -17,9 +18,10 @@ public class Student {
     private String lastName;
     private LocalDate dateOfBirth;
     private House house;
-    private boolean prefect;
-    private int enrollmentYear;
-    private int graduationYear;
+    private boolean headOfHouse;
+    private String employment;
+    private LocalDate employmentStart;
+    private LocalDate employmentEnd;
 
     public int getId() {
         return id;
@@ -69,27 +71,35 @@ public class Student {
         this.house = house;
     }
 
-    public boolean isPrefect() {
-        return prefect;
+    public boolean isHeadOfHouse() {
+        return headOfHouse;
     }
 
-    public void setPrefect(boolean prefect) {
-        this.prefect = prefect;
+    public void setHeadOfHouse(boolean headOfHouse) {
+        this.headOfHouse = headOfHouse;
     }
 
-    public int getEnrollmentYear() {
-        return enrollmentYear;
+    public String getEmployment() {
+        return employment;
     }
 
-    public void setEnrollmentYear(int enrollmentYear) {
-        this.enrollmentYear = enrollmentYear;
+    public void setEmployment(String employment) {
+        this.employment = employment;
     }
 
-    public int getGraduationYear() {
-        return graduationYear;
+    public LocalDate getEmploymentStart() {
+        return employmentStart;
     }
 
-    public void setGraduationYear(int graduationYear) {
-        this.graduationYear = graduationYear;
+    public void setEmploymentStart(LocalDate employmentStart) {
+        this.employmentStart = employmentStart;
+    }
+
+    public LocalDate getEmploymentEnd() {
+        return employmentEnd;
+    }
+
+    public void setEmploymentEnd(LocalDate employmentEnd) {
+        this.employmentEnd = employmentEnd;
     }
 }
