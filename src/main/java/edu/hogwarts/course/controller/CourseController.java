@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 public class CourseController {
@@ -31,21 +32,21 @@ public class CourseController {
     }
 
     @GetMapping("/courses/{id}/teachers")
-    public ResponseEntity<List<Teacher>> getCourseTeachers(@PathVariable int id) {
+    public ResponseEntity<Teacher> getCourseTeacher(@PathVariable int id) {
         Optional<Course> course = courseRepository.findById(id);
         if (course.isPresent()) {
-            List<Teacher> teachers = (List<Teacher>) course.get().getTeacher();
-            return ResponseEntity.ok().body(teachers);
+            Teacher teacher = course.get().getTeacher();
+            return ResponseEntity.ok().body(teacher);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/courses/{id}/students")
-    public ResponseEntity<List<Student>> getCourseStudents(@PathVariable int id) {
+    public ResponseEntity<Set<Student>> getCourseStudents(@PathVariable int id) {
         Optional<Course> course = courseRepository.findById(id);
         if (course.isPresent()) {
-            List<Student> students = (List<Student>) course.get().getStudents();
+            Set<Student> students = course.get().getStudents();
             return ResponseEntity.ok().body(students);
         } else {
             return ResponseEntity.notFound().build();
