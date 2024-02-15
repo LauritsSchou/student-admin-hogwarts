@@ -17,7 +17,7 @@ public class Teacher {
     @ManyToOne
     private House house;
     private boolean headOfHouse;
-    private String employment;
+    private EmploymentType employment;
     private LocalDate employmentStart;
     private LocalDate employmentEnd;
 
@@ -75,11 +75,11 @@ public class Teacher {
         this.headOfHouse = headOfHouse;
     }
 
-    public String getEmployment() {
+    public EmploymentType getEmployment() {
         return employment;
     }
 
-    public void setEmployment(String employment) {
+    public void setEmployment(EmploymentType employment) {
         this.employment = employment;
     }
 
