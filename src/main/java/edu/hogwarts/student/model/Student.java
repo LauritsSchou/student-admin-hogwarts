@@ -18,6 +18,7 @@ public class Student {
     private boolean prefect;
     private int enrollmentYear;
     private int graduationYear;
+    private boolean graduated;
 
     public int getId() {
         return id;
@@ -90,4 +91,12 @@ public class Student {
     public void setGraduationYear(int graduationYear) {
         this.graduationYear = graduationYear;
     }
+    public boolean isGraduated() {
+        return graduated;
+    }
+
+    public void setGraduated(boolean graduated) {
+        this.graduated = graduated;
+    }
 }
+

@@ -12,12 +12,12 @@ import java.util.Optional;
 @RestController
 public class TeacherController {
     private final TeacherRepository teacherRepository;
-    public TeacherController(TeacherRepository teacherRepository) {this.teacherRepository = teacherRepository;}
+    public TeacherController(TeacherRepository teacherRepository) {
+        this.teacherRepository = teacherRepository;}
 
 @GetMapping("/teachers")
 public List<Teacher> getAllTeachers(){
-    List<Teacher> teachers = teacherRepository.findAll();
-    return teachers;
+    return teacherRepository.findAll();
 }
 @GetMapping("/teachers/{id}")
 public ResponseEntity<Teacher> getTeacher(@PathVariable int id){
