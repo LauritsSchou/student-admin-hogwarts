@@ -1,10 +1,7 @@
 package edu.hogwarts.teacher.model;
 
 import edu.hogwarts.house.model.House;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -17,6 +14,7 @@ public class Teacher {
     private String middleName;
     private String lastName;
     private LocalDate dateOfBirth;
+    @ManyToOne
     private House house;
     private boolean headOfHouse;
     private String employment;
@@ -62,15 +60,13 @@ public class Teacher {
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-
-    public String getHouse() {
+    public House getHouse() {
         return house;
     }
 
-    public void setHouse(String house) {
+    public void setHouse(House house) {
         this.house = house;
     }
-
     public boolean isHeadOfHouse() {
         return headOfHouse;
     }
