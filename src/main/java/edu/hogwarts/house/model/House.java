@@ -43,7 +43,7 @@ private String colors;
         return colors;
     }
 
-    public void setColors(String colors) {
-        this.colors = colors;
+    public void setColors(String color1, String color2) {
+        this.colors = color1 + " and " + color2;
     }
 }

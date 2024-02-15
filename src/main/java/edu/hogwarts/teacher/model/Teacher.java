@@ -67,6 +67,7 @@ public class Teacher {
     public void setHouse(House house) {
         this.house = house;
     }
+
     public boolean isHeadOfHouse() {
         return headOfHouse;
     }
