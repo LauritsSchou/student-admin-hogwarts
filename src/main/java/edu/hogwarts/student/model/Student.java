@@ -14,6 +14,7 @@ public class Student {
     private String lastName;
     private LocalDate dateOfBirth;
     @ManyToOne
+    @JoinColumn(name = "house")
     private House house;
     private boolean prefect;
     private int enrollmentYear;

@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
+@RequestMapping("/courses")
 public class CourseController {
     private final CourseRepository courseRepository;
 
@@ -20,18 +21,18 @@ public class CourseController {
         this.courseRepository = courseRepository;
     }
 
-    @GetMapping("/courses")
+    @GetMapping
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
-    @GetMapping("/courses/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Course> getCourse(@PathVariable int id) {
         Optional<Course> course = courseRepository.findById(id);
         return ResponseEntity.of(course);
     }
 
-    @GetMapping("/courses/{id}/teachers")
+    @GetMapping("/{id}/teachers")
     public ResponseEntity<Teacher> getCourseTeacher(@PathVariable int id) {
         Optional<Course> course = courseRepository.findById(id);
         if (course.isPresent()) {
@@ -42,7 +43,7 @@ public class CourseController {
         }
     }
 
-    @GetMapping("/courses/{id}/students")
+    @GetMapping("/{id}/students")
     public ResponseEntity<Set<Student>> getCourseStudents(@PathVariable int id) {
         Optional<Course> course = courseRepository.findById(id);
         if (course.isPresent()) {
@@ -53,13 +54,13 @@ public class CourseController {
         }
     }
 
-    @PostMapping("/courses")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Course createCourse(@RequestBody Course course) {
         return courseRepository.save(course);
     }
 
-    @PutMapping("/courses/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable int id, @RequestBody Course course) {
         Optional<Course> original = courseRepository.findById(id);
         if (original.isPresent()) {
@@ -75,7 +76,7 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
     }
-    @DeleteMapping("/courses/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Course> deleteCourse(@PathVariable int id) {
         Optional<Course> course = courseRepository.findById(id);
         course.ifPresent(courseRepository::delete);

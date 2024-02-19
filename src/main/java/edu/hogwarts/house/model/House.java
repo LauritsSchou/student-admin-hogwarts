@@ -1,5 +1,7 @@
 package edu.hogwarts.house.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,19 +11,12 @@ import jakarta.persistence.Id;
 
 public class House {
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private int id;
 private String name;
 private String founder;
-private String colors;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+@JsonIgnore
+private String color1;
+@JsonIgnore
+private String color2;
 
     public String getName() {
         return name;
@@ -39,11 +34,24 @@ private String colors;
         this.founder = founder;
     }
 
-    public String getColors() {
-        return colors;
+    public String getColor1() {
+        return color1;
     }
 
-    public void setColors(String color1, String color2) {
-        this.colors = color1 + " and " + color2;
+    public void setColor1(String color1) {
+        this.color1 = color1;
+    }
+
+    public String getColor2() {
+        return color2;
+    }
+
+    public void setColor2(String color2) {
+        this.color2 = color2;
+    }
+
+    @JsonProperty("colors")
+    public String[] getColors() {
+        return new String[]{color1, color2};
     }
 }

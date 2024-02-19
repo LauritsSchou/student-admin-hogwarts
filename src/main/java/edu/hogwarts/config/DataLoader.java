@@ -53,25 +53,29 @@ public class DataLoader implements ApplicationRunner {
             House gryffindor = new House();
             gryffindor.setName("Gryffindor");
             gryffindor.setFounder("Godric Gryffindor");
-            gryffindor.setColors("Red", "Gold");
+            gryffindor.setColor1("Red");
+            gryffindor.setColor2("Gold");
             houseRepository.save(gryffindor);
 
             House slytherin = new House();
             slytherin.setName("Slytherin");
             slytherin.setFounder("Salazar Slytherin");
-            slytherin.setColors("Green", "Silver");
+            slytherin.setColor1("Green");
+            slytherin.setColor2("Silver");
             houseRepository.save(slytherin);
 
             House hufflepuff = new House();
             hufflepuff.setName("HufflePuff");
             hufflepuff.setFounder("Helga Hufflepuff");
-            hufflepuff.setColors("Yellow", "Black");
+            hufflepuff.setColor1("Yellow");
+            hufflepuff.setColor2("Black");
             houseRepository.save(hufflepuff);
 
             House ravenclaw = new House();
             ravenclaw.setName("Ravenclaw");
             ravenclaw.setFounder("Rowena Ravenclaw");
-            ravenclaw.setColors("Blue", "Bronze");
+            ravenclaw.setColor1("Blue");
+            ravenclaw.setColor2("Bronze");
             houseRepository.save(ravenclaw);
 
     }
