@@ -1,5 +1,7 @@
 package edu.hogwarts.student.controller;
 
+import edu.hogwarts.house.model.House;
+import edu.hogwarts.house.repository.HouseRepository;
 import edu.hogwarts.student.dto.StudentDTO;
 import edu.hogwarts.student.model.Student;
 import edu.hogwarts.student.repository.StudentRepository;
@@ -15,8 +17,10 @@ import java.util.Optional;
 @RequestMapping("/students")
 public class StudentController {
     private final StudentRepository studentRepository;
+    private final  HouseRepository houseRepository;
 
-    public StudentController(StudentRepository studentRepository) {
+    public StudentController(StudentRepository studentRepository, HouseRepository houseRepository) {
+        this.houseRepository = houseRepository;
         this.studentRepository = studentRepository;
     }
 
@@ -64,15 +68,29 @@ public class StudentController {
 
         return ResponseEntity.ok(studentDTO);
     }
-
-
-    @PostMapping("/students")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Student createStudent(@RequestBody Student student) {
-        return studentRepository.save(student);
+    public ResponseEntity<Student> createStudent(@RequestBody StudentDTO studentDTO) {
+        String houseName = studentDTO.getHouse();
+        House house = houseRepository.findByName(houseName).orElse(null);
+        if (house == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Student student = new Student();
+        student.setFirstName(studentDTO.getFirstName());
+        student.setMiddleName(studentDTO.getMiddleName());
+        student.setLastName(studentDTO.getLastName());
+        student.setDateOfBirth(studentDTO.getDateOfBirth());
+        student.setHouse(house);
+        student.setPrefect(studentDTO.isPrefect());
+        student.setEnrollmentYear(studentDTO.getEnrollmentYear());
+        student.setGraduationYear(studentDTO.getGraduationYear());
+        student.setGraduated(studentDTO.isGraduated());
+        Student savedStudent = studentRepository.save(student);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
     }
 
-    @PutMapping("/students/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student student) {
         Optional<Student> original = studentRepository.findById(id);
         if (original.isPresent()) {
@@ -94,7 +112,7 @@ public class StudentController {
         }
     }
 
-    @DeleteMapping("/students/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable int id) {
         Optional<Student> student = studentRepository.findById(id);
         studentRepository.deleteById(id);
