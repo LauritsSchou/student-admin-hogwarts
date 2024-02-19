@@ -37,6 +37,7 @@ public class StudentController {
             studentDTO.setLastName(student.getLastName());
             studentDTO.setDateOfBirth(student.getDateOfBirth());
             studentDTO.setHouse(student.getHouse().getName());
+            studentDTO.setSchoolYear(student.getSchoolYear());
             studentDTO.setEnrollmentYear(student.getEnrollmentYear());
             studentDTO.setGraduationYear(student.getGraduationYear());
             studentDTO.setGraduated(student.isGraduated());
@@ -64,6 +65,7 @@ public class StudentController {
         studentDTO.setLastName(student.getLastName());
         studentDTO.setDateOfBirth(student.getDateOfBirth());
         studentDTO.setHouse(student.getHouse().getName());
+        studentDTO.setSchoolYear(student.getSchoolYear());
         studentDTO.setEnrollmentYear(student.getEnrollmentYear());
         studentDTO.setGraduationYear(student.getGraduationYear());
         studentDTO.setGraduated(student.isGraduated());
@@ -102,6 +104,7 @@ public class StudentController {
         student.setDateOfBirth(studentDTO.getDateOfBirth());
         student.setHouse(house);
         student.setPrefect(studentDTO.isPrefect());
+        student.setSchoolYear(studentDTO.getSchoolYear());
         student.setEnrollmentYear(studentDTO.getEnrollmentYear());
         student.setGraduationYear(studentDTO.getGraduationYear());
         student.setGraduated(studentDTO.isGraduated());
@@ -122,6 +125,7 @@ public class StudentController {
             originalStudent.setHouse(student.getHouse());
             originalStudent.setPrefect(student.isPrefect());
             originalStudent.setEnrollmentYear(student.getEnrollmentYear());
+            originalStudent.setSchoolYear(student.getSchoolYear());
             originalStudent.setGraduationYear(student.getGraduationYear());
             originalStudent.setGraduated(student.isGraduated());
 

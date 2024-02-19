@@ -11,6 +11,7 @@ public class StudentDTO {
     private LocalDate dateOfBirth;
     private String house;
     private boolean prefect;
+    private int schoolYear;
     private int enrollmentYear;
     private int graduationYear;
     private boolean graduated;
@@ -76,6 +77,14 @@ public class StudentDTO {
 
     public void setPrefect(boolean prefect) {
         this.prefect = prefect;
+    }
+
+    public int getSchoolYear() {
+        return schoolYear;
+    }
+
+    public void setSchoolYear(int schoolYear) {
+        this.schoolYear = schoolYear;
     }
 
     public int getEnrollmentYear() {
