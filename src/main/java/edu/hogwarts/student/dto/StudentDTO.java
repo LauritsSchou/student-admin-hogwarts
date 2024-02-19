@@ -1,37 +1,17 @@
-package edu.hogwarts.student.model;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import edu.hogwarts.house.model.House;
-import jakarta.persistence.*;
+package edu.hogwarts.student.dto;
 
 import java.time.LocalDate;
 
-@Entity
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class StudentDTO {
     private String firstName;
     private String middleName;
     private String lastName;
     private LocalDate dateOfBirth;
-    @ManyToOne
-    @JoinColumn(name = "house")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property ="name")
-    private House house;
+    private String house;
     private boolean prefect;
     private int enrollmentYear;
     private int graduationYear;
     private boolean graduated;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -65,11 +45,11 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public House getHouse() {
+    public String getHouse() {
         return house;
     }
 
-    public void setHouse(House house) {
+    public void setHouse(String house) {
         this.house = house;
     }
 
@@ -96,6 +76,7 @@ public class Student {
     public void setGraduationYear(int graduationYear) {
         this.graduationYear = graduationYear;
     }
+
     public boolean isGraduated() {
         return graduated;
     }
@@ -104,4 +85,3 @@ public class Student {
         this.graduated = graduated;
     }
 }
-

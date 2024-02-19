@@ -1,15 +1,18 @@
 package edu.hogwarts.student.controller;
 
+import edu.hogwarts.student.dto.StudentDTO;
 import edu.hogwarts.student.model.Student;
 import edu.hogwarts.student.repository.StudentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/students")
 public class StudentController {
     private final StudentRepository studentRepository;
 
@@ -17,16 +20,51 @@ public class StudentController {
         this.studentRepository = studentRepository;
     }
 
-    @GetMapping("/students")
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    @GetMapping()
+    public List<StudentDTO> getAllStudents() {
+        List<Student> students = studentRepository.findAll();
+
+        List<StudentDTO> studentDTOs = new ArrayList<>();
+        for (Student student : students) {
+            StudentDTO studentDTO = new StudentDTO();
+            studentDTO.setFirstName(student.getFirstName());
+            studentDTO.setMiddleName(student.getMiddleName());
+            studentDTO.setLastName(student.getLastName());
+            studentDTO.setDateOfBirth(student.getDateOfBirth());
+            studentDTO.setHouse(student.getHouse().getName());
+            studentDTO.setEnrollmentYear(student.getEnrollmentYear());
+            studentDTO.setGraduationYear(student.getGraduationYear());
+            studentDTO.setGraduated(student.isGraduated());
+            studentDTOs.add(studentDTO);
+        }
+
+        return studentDTOs;
     }
 
-    @GetMapping("/students/{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable int id) {
-        Optional<Student> student = studentRepository.findById(id);
-        return ResponseEntity.of(student);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDTO> getStudent(@PathVariable int id) {
+        Optional<Student> studentOptional = studentRepository.findById(id);
+
+        if (studentOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Student student = studentOptional.get();
+
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setFirstName(student.getFirstName());
+        studentDTO.setMiddleName(student.getMiddleName());
+        studentDTO.setLastName(student.getLastName());
+        studentDTO.setDateOfBirth(student.getDateOfBirth());
+        studentDTO.setHouse(student.getHouse().getName());
+        studentDTO.setEnrollmentYear(student.getEnrollmentYear());
+        studentDTO.setGraduationYear(student.getGraduationYear());
+        studentDTO.setGraduated(student.isGraduated());
+
+        return ResponseEntity.ok(studentDTO);
     }
+
 
     @PostMapping("/students")
     @ResponseStatus(HttpStatus.CREATED)
