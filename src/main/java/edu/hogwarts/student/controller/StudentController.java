@@ -31,6 +31,7 @@ public class StudentController {
         List<StudentDTO> studentDTOs = new ArrayList<>();
         for (Student student : students) {
             StudentDTO studentDTO = new StudentDTO();
+            studentDTO.setId(student.getId());
             studentDTO.setFirstName(student.getFirstName());
             studentDTO.setMiddleName(student.getMiddleName());
             studentDTO.setLastName(student.getLastName());
@@ -57,6 +58,7 @@ public class StudentController {
         Student student = studentOptional.get();
 
         StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setId(student.getId());
         studentDTO.setFirstName(student.getFirstName());
         studentDTO.setMiddleName(student.getMiddleName());
         studentDTO.setLastName(student.getLastName());
@@ -71,15 +73,32 @@ public class StudentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Student> createStudent(@RequestBody StudentDTO studentDTO) {
+        String name = studentDTO.getName();
+        String[] names = name.split("\\s+");
+
+        Student student = new Student();
+
+        if (names.length == 1) {
+            student.setFirstName(names[0]);
+            student.setMiddleName("");
+            student.setLastName("");
+        } else if (names.length == 2) {
+            student.setFirstName(names[0]);
+            student.setMiddleName("");
+            student.setLastName(names[1]);
+        } else if (names.length >= 3) {
+            student.setFirstName(names[0]);
+            student.setMiddleName(names[1]);
+            student.setLastName(names[names.length - 1]); // Last token is considered as the last name
+        } else {
+            return ResponseEntity.badRequest().build(); // Invalid name format
+        }
+
         String houseName = studentDTO.getHouse();
         House house = houseRepository.findByName(houseName).orElse(null);
         if (house == null) {
             return ResponseEntity.badRequest().build();
         }
-        Student student = new Student();
-        student.setFirstName(studentDTO.getFirstName());
-        student.setMiddleName(studentDTO.getMiddleName());
-        student.setLastName(studentDTO.getLastName());
         student.setDateOfBirth(studentDTO.getDateOfBirth());
         student.setHouse(house);
         student.setPrefect(studentDTO.isPrefect());
@@ -89,6 +108,7 @@ public class StudentController {
         Student savedStudent = studentRepository.save(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
     }
+
 
     @PutMapping("{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student student) {

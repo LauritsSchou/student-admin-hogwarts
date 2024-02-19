@@ -3,15 +3,24 @@ package edu.hogwarts.student.dto;
 import java.time.LocalDate;
 
 public class StudentDTO {
+    private int id;
     private String firstName;
     private String middleName;
     private String lastName;
+    private String name;
     private LocalDate dateOfBirth;
     private String house;
     private boolean prefect;
     private int enrollmentYear;
     private int graduationYear;
     private boolean graduated;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -35,6 +44,14 @@ public class StudentDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LocalDate getDateOfBirth() {
@@ -84,4 +101,6 @@ public class StudentDTO {
     public void setGraduated(boolean graduated) {
         this.graduated = graduated;
     }
+
+
 }
