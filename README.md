@@ -1,0 +1,1 @@
+[![Build and deploy JAR app to Azure Web App - hogwartsappdb](https://github.com/LauritsSchou/student-admin-hogwarts/actions/workflows/hogwarts-part4_hogwartsappdb.yml/badge.svg)](https://github.com/LauritsSchou/student-admin-hogwarts/actions/workflows/hogwarts-part4_hogwartsappdb.yml)
