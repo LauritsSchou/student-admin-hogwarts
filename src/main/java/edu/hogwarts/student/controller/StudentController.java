@@ -144,7 +144,6 @@ public class StudentController {
         if (originalOptional.isPresent()) {
             Student originalStudent = originalOptional.get();
 
-            // Apply changes from the patchDTO
             if (patchDTO.isPrefect() != originalStudent.isPrefect()) {
                 originalStudent.setPrefect(patchDTO.isPrefect());
             }
@@ -158,7 +157,6 @@ public class StudentController {
                 originalStudent.setGraduationYear(patchDTO.getGraduationYear());
             }
 
-            // Save the updated student
             Student updatedStudent = studentRepository.save(originalStudent);
 
             return ResponseEntity.ok(updatedStudent);
