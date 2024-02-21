@@ -3,6 +3,7 @@ package edu.hogwarts.student.controller;
 import edu.hogwarts.house.model.House;
 import edu.hogwarts.house.repository.HouseRepository;
 import edu.hogwarts.student.dto.StudentDTO;
+import edu.hogwarts.student.dto.StudentPatchDTO;
 import edu.hogwarts.student.model.Student;
 import edu.hogwarts.student.repository.StudentRepository;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -91,9 +93,9 @@ public class StudentController {
         } else if (names.length >= 3) {
             student.setFirstName(names[0]);
             student.setMiddleName(names[1]);
-            student.setLastName(names[names.length - 1]); // Last token is considered as the last name
+            student.setLastName(names[names.length - 1]);
         } else {
-            return ResponseEntity.badRequest().build(); // Invalid name format
+            return ResponseEntity.badRequest().build();
         }
 
         String houseName = studentDTO.getHouse();
@@ -135,6 +137,36 @@ public class StudentController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Student> patchStudent(@PathVariable int id, @RequestBody StudentPatchDTO patchDTO) {
+        Optional<Student> originalOptional = studentRepository.findById(id);
+        if (originalOptional.isPresent()) {
+            Student originalStudent = originalOptional.get();
+
+            // Apply changes from the patchDTO
+            if (patchDTO.isPrefect() != originalStudent.isPrefect()) {
+                originalStudent.setPrefect(patchDTO.isPrefect());
+            }
+            if (patchDTO.getSchoolYear() != null) {
+                originalStudent.setSchoolYear(patchDTO.getSchoolYear());
+            }
+            if(patchDTO.isGraduated() != originalStudent.isGraduated()){
+                originalStudent.setGraduated(patchDTO.isGraduated());
+            }
+            if (patchDTO.getGraduationYear() != null) {
+                originalStudent.setGraduationYear(patchDTO.getGraduationYear());
+            }
+
+            // Save the updated student
+            Student updatedStudent = studentRepository.save(originalStudent);
+
+            return ResponseEntity.ok(updatedStudent);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @DeleteMapping("{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable int id) {
