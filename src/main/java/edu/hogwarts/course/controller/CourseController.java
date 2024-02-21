@@ -3,6 +3,7 @@ package edu.hogwarts.course.controller;
 import edu.hogwarts.course.model.Course;
 import edu.hogwarts.course.repository.CourseRepository;
 import edu.hogwarts.student.model.Student;
+import edu.hogwarts.student.repository.StudentRepository;
 import edu.hogwarts.teacher.model.Teacher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ import java.util.Set;
 @RequestMapping("/courses")
 public class CourseController {
     private final CourseRepository courseRepository;
+    private final StudentRepository studentRepository;
 
-    public CourseController(CourseRepository courseRepository) {
+    public CourseController(CourseRepository courseRepository, StudentRepository studentRepository) {
         this.courseRepository = courseRepository;
+        this.studentRepository = studentRepository;
     }
 
     @GetMapping
@@ -60,6 +63,30 @@ public class CourseController {
         return courseRepository.save(course);
     }
 
+    @PostMapping("/{id}/students")
+    public ResponseEntity<Course> addStudentsToCourse(@PathVariable int id, @RequestBody List<Integer> studentIds) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            Set<Student> students = course.getStudents();
+
+            for (int studentId : studentIds) {
+                Optional<Student> studentOptional = studentRepository.findById(studentId);
+                if (studentOptional.isPresent()) {
+                    Student student = studentOptional.get();
+                    students.add(student);
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            }
+            course.setStudents(students);
+            Course updatedCourse = courseRepository.save(course);
+
+            return ResponseEntity.ok(updatedCourse);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable int id, @RequestBody Course course) {
         Optional<Course> original = courseRepository.findById(id);
