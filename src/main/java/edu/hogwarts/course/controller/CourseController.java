@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -64,24 +65,33 @@ public class CourseController {
     }
 
     @PostMapping("/{id}/students")
-    public ResponseEntity<Course> addStudentsToCourse(@PathVariable int id, @RequestBody List<Integer> studentIds) {
+    public ResponseEntity<Course> addStudentsToCourse(@PathVariable int id, @RequestBody List<Object> studentIdentifiers) {
         Optional<Course> courseOptional = courseRepository.findById(id);
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
-            Set<Student> students = course.getStudents();
+            Set<Student> students = new HashSet<>();
 
-            for (int studentId : studentIds) {
-                Optional<Student> studentOptional = studentRepository.findById(studentId);
-                if (studentOptional.isPresent()) {
-                    Student student = studentOptional.get();
-                    students.add(student);
+            for (Object identifier : studentIdentifiers) {
+                if (identifier instanceof Integer) {
+                    int studentId = (Integer) identifier;
+                    Optional<Student> studentOptional = studentRepository.findById(studentId);
+                    studentOptional.ifPresent(students::add);
+                    if (studentOptional.isEmpty()) {
+                        return ResponseEntity.notFound().build();
+                    }
+                } else if (identifier instanceof String name) {
+                    List<Student> matchingStudents = studentRepository.findByFullNameContainingIgnoreCase(name);
+                    if (!matchingStudents.isEmpty()) {
+                        students.addAll(matchingStudents);
+                    } else {
+                        return ResponseEntity.notFound().build();
+                    }
                 } else {
-                    return ResponseEntity.notFound().build();
+                    return ResponseEntity.badRequest().build();
                 }
             }
-            course.setStudents(students);
+            course.getStudents().addAll(students);
             Course updatedCourse = courseRepository.save(course);
-
             return ResponseEntity.ok(updatedCourse);
         } else {
             return ResponseEntity.notFound().build();
