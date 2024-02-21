@@ -2,7 +2,7 @@ package edu.hogwarts.student.controller;
 
 import edu.hogwarts.house.model.House;
 import edu.hogwarts.house.repository.HouseRepository;
-import edu.hogwarts.student.dto.StudentDTO;
+import edu.hogwarts.student.dto.StudentGetDTO;
 import edu.hogwarts.student.dto.StudentPatchDTO;
 import edu.hogwarts.student.model.Student;
 import edu.hogwarts.student.repository.StudentRepository;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -27,31 +26,31 @@ public class StudentController {
     }
 
     @GetMapping()
-    public List<StudentDTO> getAllStudents() {
+    public List<StudentGetDTO> getAllStudents() {
         List<Student> students = studentRepository.findAll();
 
-        List<StudentDTO> studentDTOs = new ArrayList<>();
+        List<StudentGetDTO> studentGetDTOS = new ArrayList<>();
         for (Student student : students) {
-            StudentDTO studentDTO = new StudentDTO();
-            studentDTO.setId(student.getId());
-            studentDTO.setFirstName(student.getFirstName());
-            studentDTO.setMiddleName(student.getMiddleName());
-            studentDTO.setLastName(student.getLastName());
-            studentDTO.setDateOfBirth(student.getDateOfBirth());
-            studentDTO.setHouse(student.getHouse().getName());
-            studentDTO.setSchoolYear(student.getSchoolYear());
-            studentDTO.setEnrollmentYear(student.getEnrollmentYear());
-            studentDTO.setGraduationYear(student.getGraduationYear());
-            studentDTO.setGraduated(student.isGraduated());
-            studentDTOs.add(studentDTO);
+            StudentGetDTO getDTO = new StudentGetDTO();
+            getDTO.setId(student.getId());
+            getDTO.setFirstName(student.getFirstName());
+            getDTO.setMiddleName(student.getMiddleName());
+            getDTO.setLastName(student.getLastName());
+            getDTO.setDateOfBirth(student.getDateOfBirth());
+            getDTO.setHouse(student.getHouse().getName());
+            getDTO.setSchoolYear(student.getSchoolYear());
+            getDTO.setEnrollmentYear(student.getEnrollmentYear());
+            getDTO.setGraduationYear(student.getGraduationYear());
+            getDTO.setGraduated(student.isGraduated());
+            studentGetDTOS.add(getDTO);
         }
 
-        return studentDTOs;
+        return studentGetDTOS;
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getStudent(@PathVariable int id) {
+    public ResponseEntity<StudentGetDTO> getStudent(@PathVariable int id) {
         Optional<Student> studentOptional = studentRepository.findById(id);
 
         if (studentOptional.isEmpty()) {
@@ -60,24 +59,24 @@ public class StudentController {
 
         Student student = studentOptional.get();
 
-        StudentDTO studentDTO = new StudentDTO();
-        studentDTO.setId(student.getId());
-        studentDTO.setFirstName(student.getFirstName());
-        studentDTO.setMiddleName(student.getMiddleName());
-        studentDTO.setLastName(student.getLastName());
-        studentDTO.setDateOfBirth(student.getDateOfBirth());
-        studentDTO.setHouse(student.getHouse().getName());
-        studentDTO.setSchoolYear(student.getSchoolYear());
-        studentDTO.setEnrollmentYear(student.getEnrollmentYear());
-        studentDTO.setGraduationYear(student.getGraduationYear());
-        studentDTO.setGraduated(student.isGraduated());
+        StudentGetDTO getDTO = new StudentGetDTO();
+        getDTO.setId(student.getId());
+        getDTO.setFirstName(student.getFirstName());
+        getDTO.setMiddleName(student.getMiddleName());
+        getDTO.setLastName(student.getLastName());
+        getDTO.setDateOfBirth(student.getDateOfBirth());
+        getDTO.setHouse(student.getHouse().getName());
+        getDTO.setSchoolYear(student.getSchoolYear());
+        getDTO.setEnrollmentYear(student.getEnrollmentYear());
+        getDTO.setGraduationYear(student.getGraduationYear());
+        getDTO.setGraduated(student.isGraduated());
 
-        return ResponseEntity.ok(studentDTO);
+        return ResponseEntity.ok(getDTO);
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Student> createStudent(@RequestBody StudentDTO studentDTO) {
-        String name = studentDTO.getName();
+    public ResponseEntity<Student> createStudent(@RequestBody StudentGetDTO getDTO) {
+        String name = getDTO.getName();
         String[] names = name.split("\\s+");
 
         Student student = new Student();
@@ -98,18 +97,18 @@ public class StudentController {
             return ResponseEntity.badRequest().build();
         }
 
-        String houseName = studentDTO.getHouse();
+        String houseName = getDTO.getHouse();
         House house = houseRepository.findByName(houseName).orElse(null);
         if (house == null) {
             return ResponseEntity.badRequest().build();
         }
-        student.setDateOfBirth(studentDTO.getDateOfBirth());
+        student.setDateOfBirth(getDTO.getDateOfBirth());
         student.setHouse(house);
-        student.setPrefect(studentDTO.isPrefect());
-        student.setSchoolYear(studentDTO.getSchoolYear());
-        student.setEnrollmentYear(studentDTO.getEnrollmentYear());
-        student.setGraduationYear(studentDTO.getGraduationYear());
-        student.setGraduated(studentDTO.isGraduated());
+        student.setPrefect(getDTO.isPrefect());
+        student.setSchoolYear(getDTO.getSchoolYear());
+        student.setEnrollmentYear(getDTO.getEnrollmentYear());
+        student.setGraduationYear(getDTO.getGraduationYear());
+        student.setGraduated(getDTO.isGraduated());
         Student savedStudent = studentRepository.save(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
     }

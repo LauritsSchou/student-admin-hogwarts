@@ -2,7 +2,7 @@ package edu.hogwarts.student.dto;
 
 import java.time.LocalDate;
 
-public class StudentDTO {
+public class StudentGetDTO {
     private int id;
     private String firstName;
     private String middleName;

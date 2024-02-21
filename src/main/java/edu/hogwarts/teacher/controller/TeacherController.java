@@ -1,5 +1,6 @@
 package edu.hogwarts.teacher.controller;
 
+import edu.hogwarts.teacher.dto.TeacherGetDTO;
 import edu.hogwarts.teacher.dto.TeacherPatchDTO;
 import edu.hogwarts.teacher.model.Teacher;
 import edu.hogwarts.teacher.repository.TeacherRepository;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,13 +20,46 @@ public class TeacherController {
         this.teacherRepository = teacherRepository;}
 
 @GetMapping()
-public List<Teacher> getAllTeachers(){
-    return teacherRepository.findAll();
+public List<TeacherGetDTO> getAllTeachers(){
+    List<Teacher> teachers = teacherRepository.findAll();
+
+    List<TeacherGetDTO> teacherGetDTOS = new ArrayList<>();
+    for (Teacher teacher : teachers){
+        TeacherGetDTO getDTO = new TeacherGetDTO();
+        getDTO.setId(teacher.getId());
+        getDTO.setFirstName(teacher.getFirstName());
+        getDTO.setMiddleName(teacher.getMiddleName());
+        getDTO.setLastName(teacher.getLastName());
+        getDTO.setDateOfBirth(teacher.getDateOfBirth());
+        getDTO.setHouse(teacher.getHouse().getName());
+        getDTO.setHeadOfHouse(teacher.isHeadOfHouse());
+        getDTO.setEmployment(teacher.getEmployment());
+        getDTO.setEmploymentStart(teacher.getEmploymentStart());
+        getDTO.setEmploymentEnd(teacher.getEmploymentEnd());
+        teacherGetDTOS.add(getDTO);
+    }
+    return teacherGetDTOS;
 }
 @GetMapping("/{id}")
-public ResponseEntity<Teacher> getTeacher(@PathVariable int id){
-Optional<Teacher> teacher = teacherRepository.findById(id);
-return ResponseEntity.of(teacher);
+public ResponseEntity<TeacherGetDTO> getTeacher(@PathVariable int id){
+Optional<Teacher> teacherOptional = teacherRepository.findById(id);
+if(teacherOptional.isEmpty()){
+    return ResponseEntity.notFound().build();
+}
+Teacher teacher = teacherOptional.get();
+    TeacherGetDTO getDTO = new TeacherGetDTO();
+    getDTO.setId(teacher.getId());
+    getDTO.setFirstName(teacher.getFirstName());
+    getDTO.setMiddleName(teacher.getMiddleName());
+    getDTO.setLastName(teacher.getLastName());
+    getDTO.setDateOfBirth(teacher.getDateOfBirth());
+    getDTO.setHouse(teacher.getHouse().getName());
+    getDTO.setHeadOfHouse(teacher.isHeadOfHouse());
+    getDTO.setEmployment(teacher.getEmployment());
+    getDTO.setEmploymentStart(teacher.getEmploymentStart());
+    getDTO.setEmploymentEnd(teacher.getEmploymentEnd());
+    return ResponseEntity.ok(getDTO);
+
 }
 @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
